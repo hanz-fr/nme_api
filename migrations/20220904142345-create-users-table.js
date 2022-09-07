@@ -22,8 +22,9 @@ module.exports = {
         unique: true,
       },
       phone: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         allowNull: false,
+        unique: true,
       },
       address: {
         type: Sequelize.TEXT,

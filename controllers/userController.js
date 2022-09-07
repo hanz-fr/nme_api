@@ -127,3 +127,23 @@ exports.getUser = async (req, res) => {
         result: user
     })
 } 
+
+
+// DELETE USER BY ID
+exports.deleteUser = async (req, res) => {
+    const id = req.params.id;
+
+    // check if user exist or not.
+    const user = await User.findByPk(id);
+
+    // if not, return error
+    if (!user) {
+        return res.json({ message: "User not found." });
+    }
+
+    await user.destroy();
+
+    res.json({
+        message: 'User deleted successfully.'
+    })
+}

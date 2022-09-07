@@ -2,11 +2,23 @@ var express = require("express");
 var router = express.Router();
 const Validator = require("fastest-validator");
 
-const { User } = require("../models");
+const { User, sequelize } = require("../models");
 
 // import fastest-validator
 const v = new Validator();
 
+
+// GET ROUTE
+router.get('/', async (req, res) => {
+  const users = await sequelize.query('SELECT * FROM users', {
+    model: User,
+    mapToModel: true,
+  })
+  res.status(200).json(users);
+});
+
+
+// POST ROUTE
 router.post("/", async (req, res) => {
   try {
     // validate incoming request using fastest-validator
@@ -27,7 +39,10 @@ router.post("/", async (req, res) => {
     
     var user = await User.create(req.body);
     
-    res.json(user);
+    res.status(200).json({
+      "status": "Successfully addded user.",
+      user       
+    });
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
       res.status(403);
@@ -37,8 +52,6 @@ router.post("/", async (req, res) => {
       res.send({ status: "error", message: "Something went wrong. :(" });
     }
   }
-
-  
 });
 
 module.exports = router;
